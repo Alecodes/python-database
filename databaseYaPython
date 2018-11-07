@@ -1,0 +1,38 @@
+from peewee import *
+from os import path
+njia_yetu = path.dirname(path.realpath(__file__))
+db = SqliteDatabase(path.join(njia_yetu, "user.db"))
+
+class User(Model):
+    names = CharField()
+    email = CharField()
+    password = CharField()
+    class Meta:
+        database = db
+
+class Person(Model):
+    owner = ForeignKeyField(User, related_name = "persons")
+    names = CharField()
+    weight = DecimalField()
+    age =IntegerField()
+    class Meta:
+        database = db
+
+User.create_table(fail_silently = True)
+Person.create_table(fail_silently = True)
+
+User.create(names="John Bull",email="johjnbbu@gmail.com", password="123426")
+User.create(names="Ekipara",email="ekipara1@gmail.com", password="ekiparaa")
+User.create(names="Alex Njagi",email="alexchege@gmail.com", password="12sjdjsa3426")
+User.create(names="William Mbugua", email="mbuguawilly795@gmail.com",password="ajcjdhdjshjhsjh")
+Person.create(owner =1,names="Anthony Kamau",weight="81",age="25")
+Person.create(owner =2,names="Anthony Kamanu",weight="77",age="24")
+Person.create(owner =3,names="Anthony Kiragu",weight="72",age="26")
+Person.create(owner =4,names="Willim Mbugua",weight="70",age="21")
+
+user1 = User.get(id=1)
+print(user1.names)
+for person in user1.persons:
+    print(person.names, person.age, person.weight)
+user2=Person.get(id=1)
+print(user2.names)
